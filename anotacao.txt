@@ -1,0 +1,92 @@
+# Cria ambiente virtual
+# python -m venv venv
+
+# Ativar ambiente virtual
+# source venv/bin/activate
+
+# Lista os pacotes instalados
+# pip freeze
+
+# Gerar arquivo requirements.txt
+# pip freeze > requirements.txt
+
+# Recuperar venv com requirements.txt
+# pip install -r ./requirements.txt
+
+# Instalar o Flet
+# pip install flet
+
+
+
+
+
+
+# Instalar o django
+# pip install django
+
+# Criar o projeto django
+# django-admin startproject project .
+# python manage.py startapp bullying
+
+# Executar projeto django
+# python manage.py runserver
+# http://127.0.0.1:8000/
+
+# Realizar o migrate django
+# python manage.py migrate
+
+# Configurar o git
+# git config --global user.name 'msrscs'
+# git config --global user.email 'msrs@cesar.scholl'
+# git config --global init.defaultBranch main
+
+# git config --list
+
+# https://github.com/login
+
+# git init
+# git add .
+# git commit -m 'Inicial'
+# git remote add origin https://github.com/msrscs/bullying
+# git remote add origin git@github.com:msrscs/bullying.git
+# git remote rm origin
+
+# git status
+
+# git push origin main
+# git push --force origin main
+# ssh-keygen -f ~/.ssh/msrscs_rsa
+
+# Bullying#2025
+
+cat ~/.ssh/msrscs_rsa.pub
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0qcMPNl4IyDoCGS1bJ4aZlGLtgDXaYphzKpP41EeYoGTm2cQQXZAN5S/OmK8qZR//dcVcjv6cL66aHP4ixoEchYwF6GsnxfCw4Swn0VkLRm5MCHUdeeTdY2DMQoGg4OD2iU6Q733EAsgRBYvsXAJZm0aPeW7bZlp6W7GvIEwGrIyokOA8U9EMcqQR+m6+jR3NP49vIdOFp2RQHoh/HgV8jMuth2ieEwLmZRufnRiO3D2yR8Vj5x+GLnnYpCf4b4jdu2L8vFOMEBvL2pr96BDFhEPVqZcOocXBcwNaGerwi84JdMoYE0NethCU2xHGDoGXQfJ0PcacnIFV5wBW6eU7FDF5vyIlT5XDq1Pa1+PMqN8+tjI5gv28iQqTIndFh8wf/U9cgJnlptJTQLsPfl4H6gAAawVryfgVj+uFKKlla4QhSbS0XiwzHSabctiLCQNROQrnALTsTlR8b6+ODliqFpZ5PXg3yxmRukOWE+RqxAcV1Rn7MTC/gR+s83tJmLBDKsP/YD8bfefPhcu2hcx8brcKi2Ud8VX/aVlT115KhfewIP9PtIaHOVZe1X9JpHNeM6vRJVd2KjwdD1rDgVqKxoCwi+AuqVuwiSDlA8bV6u8XA6UVG1gsnDWnaMjTXS4LLcklR/yyf0Ys6yeRV7/hKjLUkVM3qJc/lcYnG0ZCjQ== mauro@ACSQUAL40
+
+eval $(ssh-agent)
+ssh-add ~/.ssh/msrscs_rsa
+
+git remote add origin git@github.com:maurosrs/projeto_agenda.git
+
+
+git reset HEAD .env
+
+.gitignore
+    .env
+    venv
+    env
+
+
+git push origin main -u    
+
+# Migrando a base de dados do Django
+# python manage.py makemigrations
+# python manage.py migrate
+
+
+# Criando e modificando a senha de um super usuário Django
+# python manage.py createsuperuser
+# python manage.py changepassword USERNAME
+
+# Collection Static
+# python manage.py collectstatic
