@@ -16,25 +16,6 @@
 # Instalar o Flet
 # pip install flet
 
-
-
-
-
-
-# Instalar o django
-# pip install django
-
-# Criar o projeto django
-# django-admin startproject project .
-# python manage.py startapp bullying
-
-# Executar projeto django
-# python manage.py runserver
-# http://127.0.0.1:8000/
-
-# Realizar o migrate django
-# python manage.py migrate
-
 # Configurar o git
 # git config --global user.name 'msrscs'
 # git config --global user.email 'msrs@cesar.scholl'
