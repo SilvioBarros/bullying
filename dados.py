@@ -35,7 +35,7 @@ class BancoDados:
             # Tabela de Denúncia
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Denuncias (
-                    Denunciaid INTEGER PRIMARY KEY AUTOINCREMENT,
+                    DenunciaId INTEGER PRIMARY KEY AUTOINCREMENT,
                     Senha TEXT NOT NULL,
                     DataHora DATETIME NOT NULL,
                     DescricaoOque TEXT NOT NULL,
@@ -46,38 +46,37 @@ class BancoDados:
                     Status TEXT NOT NULL
                 )
             ''')
-            conn.commit()
 
             # Tabela de Denúncia Comentários
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Denuncias_Comentarios (
-                    DenunciaComentarioid INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Denunciaid INTEGER NOT NULL,
+                    DenunciaComentarioiId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    DenunciaId INTEGER NOT NULL,
                     DataHora DATETIME NOT NULL,
                     Comentario TEXT NOT NULL,
-                    Usuarioid INTEGER NOT NULL,
-                    Status TEXT NOT NULL
+                    UsuarioId INTEGER NOT NULL,
+                    Status TEXT NOT NULL,
+                    FOREIGN KEY (DenunciaId) REFERENCES TB_Denuncias(DenunciaId)
                 )
             ''')
-            conn.commit()
 
             # Tabela de Denúncia Reunião
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Denuncias_Reuniao (
-                    DenunciaReuniaoid INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Denunciaid INTEGER NOT NULL,
+                    DenunciaReuniaoId INTEGER PRIMARY KEY AUTOINCREMENT,
+                    DenunciaId INTEGER NOT NULL,
                     DataHora DATETIME NOT NULL,
                     Comentario TEXT NOT NULL,
                     Mensagem TEXT NOT NULL,
-                    Usuarioid INTEGER NOT NULL
+                    UsuarioId INTEGER NOT NULL,
+                    FOREIGN KEY (DenunciaId) REFERENCES TB_Denuncias(DenunciaId)
                 )
             ''')
-            conn.commit()
 
             # Tabela de Cadastro de Usuários
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Usuario (
-                    Usuarioid INTEGER PRIMARY KEY AUTOINCREMENT,
+                    UsuarioId INTEGER PRIMARY KEY AUTOINCREMENT,
                     Email TEXT UNIQUE NOT NULL,
                     Senha TEXT NOT NULL,
                     Nome TEXT NOT NULL,
@@ -85,26 +84,24 @@ class BancoDados:
                     Status TEXT NOT NULL
                 )
             ''')
-            conn.commit()
 
             # Tabela de Cadastro de Materiais Educativos
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Materiais_Educativos (
-                    Materialid INTEGER PRIMARY KEY AUTOINCREMENT,
+                    MaterialId INTEGER PRIMARY KEY AUTOINCREMENT,
                     Descricao TEXT NOT NULL,
                     Link TEXT NOT NULL,
-                    UsuarioidCriou INTEGER NOT NULL,
-                    UsuarioidAlterou INTEGER NOT NULL,
+                    UsuarioIdCriou INTEGER NOT NULL,
+                    UsuarioIdAlterou INTEGER NOT NULL,
                     DataHoraUltAlt DATETIME NOT NULL,
                     Status TEXT NOT NULL
                 )
             ''')
-            conn.commit()
 
             # Tabela de Log
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS TB_Log (
-                    Loglid INTEGER PRIMARY KEY AUTOINCREMENT,
+                    LoglId INTEGER PRIMARY KEY AUTOINCREMENT,
                     Descricao TEXT NOT NULL,
                     Usuarioid INTEGER NOT NULL,
                     DataHora DATETIME NOT NULL
@@ -112,7 +109,7 @@ class BancoDados:
             ''')
             conn.commit()
 
-            print("Criou Tabelas")
+            print("Criou as Tabelas")
 
     # Criar Denúncia
     def criar_denuncia(self, senha: str, descricao_o_que: str, descricao_como_se_sente: str, local: str, frequencia: str, tipo_bullying: str) -> int | None:
