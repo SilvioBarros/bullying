@@ -1,6 +1,6 @@
 ######################################################## 
 # Projeto: App Denúncia de Bullying Anônima            #
-# Descrição: Módulo Gerencial                          #
+# Descrição: Utilidades                                #
 # Equipe:                                              #
 #           Artur Cavalcanti                           #
 #           Eduardo Henrique Ferreira Fonseca Barbosa  #
@@ -12,3 +12,9 @@
 # Versão: 1.0                                          #
 # Data: 17/04/2025                                     #
 ######################################################## 
+
+import hashlib
+
+# Gerar MD5
+def gerar_md5(senha: str) -> str:
+    return hashlib.md5(senha.encode('utf-8')).hexdigest()
