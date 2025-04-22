@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "Live Preview",
+			"workspacePath": "c:\\Users\\Cliente\\OneDrive\\Documentos\\bullying",
+			"problemMatcher": [],
+			"label": "Live Preview: Executar Servidor"
+		}
+	]
+}
