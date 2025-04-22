@@ -1,4 +1,8 @@
 ######################################################## 
+# Faculdade: Cesar School                              #
+# Período: 2025.1                                      #
+# Disciplina: Projeto 1                                #
+# Professor: Humberto Caetano                          #
 # Projeto: App Denúncia de Bullying Anônima            #
 # Descrição: Módulo Gerencial                          #
 # Equipe:                                              #
@@ -10,5 +14,5 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 17/04/2025                                     #
+# Data: 22/04/2025                                     #
 ######################################################## 
