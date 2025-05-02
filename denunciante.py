@@ -1,5 +1,6 @@
 ######################################################## 
 # Faculdade: Cesar School                              #
+# Curso: Segurança da Informação                       #
 # Período: 2025.1                                      #
 # Disciplina: Projeto 1                                #
 # Professor: Humberto Caetano                          #
@@ -14,7 +15,7 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 22/04/2025                                     #
+# Data: 02/05/2025                                     #
 ######################################################## 
 
 import dados
@@ -31,6 +32,7 @@ FORMATO_DATA = "%d/%m/%Y"
 
 # Variáveis Globais
 denuncia_id = 0
+denuncia_id_gerado = 0
 
 # Função de Início da Aplicação
 def main(page: ft.Page):
@@ -53,6 +55,7 @@ def main(page: ft.Page):
         def route_change(e):
             global denuncia_id
             global denuncia
+            global denuncia_id_gerado
 
             page.views.clear()
 
@@ -108,6 +111,210 @@ def main(page: ft.Page):
                 validar_login()   
                 page.update()
 
+            # Validar Senha Nova
+            def validar_senha_nova(e):
+                nonlocal senha_nova_valida
+                senha_nova_valida = False
+                senha_nova = tf_senha_nova.value
+                erros = []
+                # Verifica cada requisito individualmente
+                if len(senha_nova) < 8: # type: ignore 
+                    erros.append("Mínimo 8 caracteres")
+                if not re.search(r'[A-Z]', senha_nova): # type: ignore
+                    erros.append("Pelo menos 1 letra maiúscula")
+                if not re.search(r'[a-z]', senha_nova): # type: ignore
+                    erros.append("Pelo menos 1 letra minúscula")
+                if not re.search(r'[0-9]', senha_nova): # type: ignore
+                    erros.append("Pelo menos 1 número")
+                if not re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova): # type: ignore
+                    erros.append("Pelo menos 1 símbolo especial")
+
+                if erros:
+                    tf_senha_nova.error_text = "\n".join(erros)
+                    # Exibe quais requisitos foram atendidos
+                    cl_validacao_indicadores.controls = [
+                        ft.Row([
+                            ft.Text("A senha deve conter", color="grey")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if len(senha_nova) >= 8 else ft.Icons.CLOSE, # type: ignore
+                            color="green" if len(senha_nova) >= 8 else "red"), # type: ignore
+                            ft.Text("8+ caracteres")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[A-Z]', senha_nova) else ft.Icons.CLOSE, # type: ignore
+                            color="green" if re.search(r'[A-Z]', senha_nova) else "red"), # type: ignore
+                            ft.Text("Letra maiúscula")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[a-z]', senha_nova) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[a-z]', senha_nova) else "red"), # type: ignore
+                            ft.Text("Letra minúscula")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[0-9]', senha_nova) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[0-9]', senha_nova) else "red"), # type: ignore
+                            ft.Text("Número")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova) else "red"), # type: ignore
+                            ft.Text("Símbolo especial")
+                        ])
+                    ]
+                else:
+                    tf_senha_nova.error_text = None
+                    senha_nova_valida = True
+                    cl_validacao_indicadores.controls = [
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK_CIRCLE, color="green"),
+                            ft.Text("Senha forte!", weight=ft.FontWeight.BOLD)
+                        ])
+                    ]
+        
+                cl_validacao_indicadores.update()
+                validar_fazer_denuncia()
+                page.update()
+                validar_senha_nova_confirmar(e)
+
+            # Validar Senha Nova Confirmar
+            def validar_senha_nova_confirmar(e):
+                nonlocal senha_nova_confirmar_valida
+                senha_nova_confirmar_valida = False
+                senha_nova = tf_senha_nova.value
+                senha_nova_confirmar = tf_senha_nova_confirmar.value
+                errosc = []
+                # Verifica cada requisito individualmente
+                if len(senha_nova_confirmar) < 8: # type: ignore 
+                    errosc.append("Mínimo 8 caracteres")
+                if not re.search(r'[A-Z]', senha_nova_confirmar): # type: ignore
+                    errosc.append("Pelo menos 1 letra maiúscula")
+                if not re.search(r'[a-z]', senha_nova_confirmar): # type: ignore
+                    errosc.append("Pelo menos 1 letra minúscula")
+                if not re.search(r'[0-9]', senha_nova_confirmar): # type: ignore
+                    errosc.append("Pelo menos 1 número")
+                if not re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova_confirmar): # type: ignore
+                    errosc.append("Pelo menos 1 símbolo especial")
+                if not senha_nova == senha_nova_confirmar:
+                    errosc.append("Confirma Senha")
+
+                if errosc:
+                    tf_senha_nova_confirmar.error_text = "\n".join(errosc)
+                    # Exibe quais requisitos foram atendidos
+                    cl_validacao_indicadores_confirmar.controls = [
+                        ft.Row([
+                            ft.Text("A senha deve conter", color="grey")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if len(senha_nova_confirmar) >= 8 else ft.Icons.CLOSE, # type: ignore
+                            color="green" if len(senha_nova_confirmar) >= 8 else "red"), # type: ignore
+                            ft.Text("8+ caracteres")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[A-Z]', senha_nova_confirmar) else ft.Icons.CLOSE, # type: ignore
+                            color="green" if re.search(r'[A-Z]', senha_nova_confirmar) else "red"), # type: ignore
+                            ft.Text("Letra maiúscula")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[a-z]', senha_nova_confirmar) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[a-z]', senha_nova_confirmar) else "red"), # type: ignore
+                            ft.Text("Letra minúscula")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[0-9]', senha_nova_confirmar) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[0-9]', senha_nova_confirmar) else "red"), # type: ignore
+                            ft.Text("Número")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova_confirmar) else ft.Icons.CLOSE, # type: ignore
+                                color="green" if re.search(r'[!@#$%^&*(),.?":{}|<>]', senha_nova_confirmar) else "red"), # type: ignore
+                            ft.Text("Símbolo especial")
+                        ]),
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK if senha_nova_confirmar == senha_nova else ft.Icons.CLOSE,
+                                color="green" if senha_nova_confirmar == senha_nova else "red"),
+                            ft.Text("Confirma Senha")
+                        ])
+                    ]
+                else:
+                    tf_senha_nova_confirmar.error_text = None
+                    senha_nova_confirmar_valida = True
+                    cl_validacao_indicadores_confirmar.controls = [
+                        ft.Row([
+                            ft.Icon(ft.Icons.CHECK_CIRCLE, color="green"),
+                            ft.Text("Senha Confirmada!", weight=ft.FontWeight.BOLD)
+                        ])
+                    ]
+        
+                cl_validacao_indicadores_confirmar.update()
+                validar_fazer_denuncia()
+                page.update()
+
+            # Validar Descrição O que
+            def validar_descricao_o_que(e):
+                nonlocal descricao_o_que_valida
+                descricao_o_que_valida = False
+                if not tf_descricao_o_que.value.strip():  # type: ignore
+                    tf_descricao_o_que.error_text = "Requer preenchimento"
+                else:
+                    tf_descricao_o_que.error_text = None
+                    descricao_o_que_valida = True
+
+                validar_fazer_denuncia()   
+                page.update()
+
+            # Validar Descrição Como se sente
+            def validar_descricao_como_se_sente(e):
+                nonlocal descricao_como_se_sente_valida
+                descricao_como_se_sente_valida = False
+                if not tf_descricao_como_se_sente.value.strip():  # type: ignore
+                    tf_descricao_como_se_sente.error_text = "Requer preenchimento"
+                else:
+                    tf_descricao_como_se_sente.error_text = None
+                    descricao_como_se_sente_valida = True
+
+                validar_fazer_denuncia()   
+                page.update()
+
+            # Validar Local
+            def validar_local(e):
+                nonlocal local_valida
+                local_valida = False
+                if not dd_local.value.strip():  # type: ignore
+                    dd_local.error_text = "Requer preenchimento"
+                else:
+                    dd_local.error_text = None
+                    local_valida = True
+
+                validar_fazer_denuncia()   
+                page.update()
+
+            # Validar Frequência
+            def validar_frequencia(e):
+                nonlocal frequencia_valida
+                frequencia_valida = False
+                if not dd_frequencia.value.strip():  # type: ignore
+                    dd_frequencia.error_text = "Requer preenchimento"
+                else:
+                    dd_frequencia.error_text = None
+                    frequencia_valida = True
+
+                validar_fazer_denuncia()   
+                page.update()
+
+            # Validar Tipo de Bullying
+            def validar_tipo_bullying(e):
+                nonlocal tipo_bullying_valida
+                tipo_bullying_valida = False
+                if not dd_tipo_bullying.value.strip():  # type: ignore
+                    dd_tipo_bullying.error_text = "Requer preenchimento"
+                else:
+                    dd_tipo_bullying.error_text = None
+                    tipo_bullying_valida = True
+
+                validar_fazer_denuncia()   
+                page.update()
+
             # Validar login
             def validar_login():
                 nonlocal n_denuncia_valida
@@ -117,6 +324,26 @@ def main(page: ft.Page):
                     senha_valida
                 ])
                 bt_login.disabled = not login_validado
+
+            # Validar fazer Denúncia
+            def validar_fazer_denuncia():
+                nonlocal descricao_o_que_valida
+                nonlocal descricao_como_se_sente_valida
+                nonlocal local_valida
+                nonlocal frequencia_valida
+                nonlocal tipo_bullying_valida
+                nonlocal senha_nova_valida
+                nonlocal senha_nova_confirmar_valida
+                fazer_denuncia_validado = all([
+                    descricao_o_que_valida,
+                    descricao_como_se_sente_valida,
+                    local_valida,
+                    frequencia_valida,
+                    tipo_bullying_valida,
+                    senha_nova_valida,
+                    senha_nova_confirmar_valida
+                ])
+                bt_fazer_decuncia.disabled = not fazer_denuncia_validado
 
             # Acompanhar Denúncia de Bullying (Login)
             def acompanhar_login(e):
@@ -166,6 +393,13 @@ def main(page: ft.Page):
                     bd.criar_denuncia_comentario(denuncia_id, tf_comentario.value, 0, denuncia["Status"]) # type: ignore
                 return page.go("/acompanhar")
 
+            # Fazer Denúncia de Bullying
+            def fazer_denuncia(e):
+                global denuncia_id_gerado
+                denuncia_id_gerado = bd.criar_denuncia(utilidades.gerar_hash_bcrypt(tf_senha_nova.value), tf_descricao_o_que.value, tf_descricao_como_se_sente.value, dd_local.value, dd_frequencia.value, dd_tipo_bullying.value) # type: ignore
+                print(denuncia_id_gerado)
+                return page.go("/denunciaaviso")
+
             # Página Inicial
             page.views.append(
                 ft.View(
@@ -193,6 +427,46 @@ def main(page: ft.Page):
             )
             # Página Fazer Denúncia de Bullying Anônima
             if page.route == "/denuncia":
+                descricao_o_que_valida = False
+                descricao_como_se_sente_valida = False
+                local_valida = False
+                frequencia_valida = False
+                tipo_bullying_valida = False
+                senha_nova_valida = False
+                senha_nova_confirmar_valida = False
+                tf_descricao_o_que = ft.TextField(label="Descrição - O que?", multiline=True, width=610, on_change=validar_descricao_o_que) # type: ignore
+                tf_descricao_como_se_sente = ft.TextField(label="Descrição - Como se sente?", multiline=True, width=610, on_change=validar_descricao_como_se_sente) # type: ignore
+                dd_local = ft.Dropdown(label="Local", 
+                                            options=[
+                                                ft.dropdown.Option("Escola"),
+                                                ft.dropdown.Option("Internet"),
+                                                ft.dropdown.Option("Trabalho"),
+                                                ft.dropdown.Option("Outro"),
+                                                ], on_change=validar_local)
+                dd_frequencia = ft.Dropdown(label="Frequência", 
+                                                options=[
+                                                    ft.dropdown.Option("Única vez"),
+                                                    ft.dropdown.Option("Algumas vezes"),
+                                                    ft.dropdown.Option("Frequentemente"),
+                                            ], on_change=validar_frequencia)
+                dd_tipo_bullying = ft.Dropdown(label="Tipo Bullying",
+                                                options=[
+                                                    ft.dropdown.Option("Físico"),
+                                                    ft.dropdown.Option("Verbal"),
+                                                    ft.dropdown.Option("Psicológico"),
+                                                    ft.dropdown.Option("Ciberbullying"),
+                                                    ft.dropdown.Option("Outro"),
+                                            ], on_change=validar_tipo_bullying)
+                tf_senha_nova = ft.TextField(label="Nova Senha", password=True, can_reveal_password=True, on_change=validar_senha_nova)
+                
+                cl_validacao_indicadores = ft.Column(spacing=5)
+
+                tf_senha_nova_confirmar = ft.TextField(label="Confirmar a Senha", password=True, can_reveal_password=True, on_change=validar_senha_nova_confirmar)
+
+                cl_validacao_indicadores_confirmar = ft.Column(spacing=5)
+
+                bt_fazer_decuncia = ft.ElevatedButton("Fazer Denúncia", on_click=fazer_denuncia, disabled=True, icon=ft.Icons.ANNOUNCEMENT)
+
                 page.views.append(
                    ft.View(
                         "/denuncia",
@@ -207,7 +481,68 @@ def main(page: ft.Page):
                                 ),
                                 bgcolor=ft.Colors.RED_300,
                             ),
-                            ft.ElevatedButton("Voltar", on_click=lambda _: page.go("/")),
+                            ft.Container(content=ft.Column(scroll=ft.ScrollMode.AUTO, expand=True, controls=[
+                                ft.Row(
+                                    controls=[tf_descricao_o_que],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[tf_descricao_como_se_sente],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[dd_local, dd_frequencia],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[dd_tipo_bullying],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[ft.Text("Criar a Senha forte para ter acesso ao acompanhamento da denúncia.", weight=ft.FontWeight.BOLD)],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[tf_senha_nova, cl_validacao_indicadores],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[tf_senha_nova_confirmar, cl_validacao_indicadores_confirmar],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                                ft.Row(
+                                    controls=[bt_fazer_decuncia],
+                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                                ),
+                            ]), expand=True, padding=10),
+                        ],
+                    )
+            )
+            # Página Fazer Denúncia de Bullying Anônima (Aviso)
+            if page.route == "/denunciaaviso":
+                tf_v_aviso = ft.TextField(label="N° Denúncia", value=str(denuncia_id_gerado), read_only=True,  text_style=ft.TextStyle(weight=ft.FontWeight.BOLD, size=18, color=ft.Colors.BLUE))
+
+                page.views.append(
+                   ft.View(
+                        "/denunciaaviso",
+                        [
+                            ft.AppBar(
+                                title=ft.Text("Fazer Denúncia de Bullying Anônima (Aviso)"),
+                                leading=ft.IconButton(
+                                    icon=ft.Icons.ARROW_BACK,
+                                    tooltip="Voltar",  # Tooltip modificado
+                                    on_click=lambda _: page.go("/"),  # Comportamento de voltar padrão
+                                ),
+                                bgcolor=ft.Colors.RED_300,
+                            ),
+                            ft.Row(
+                                controls=[ft.Text("Atenção utilizar esse N° de Denúncia para Acompanhar a Denúncia, junto com a senha que você cadastrou.", color=ft.Colors.RED, weight=ft.FontWeight.BOLD)],
+                                alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                            ),
+                            ft.Row(
+                                controls=[tf_v_aviso],
+                                alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                            ),
                         ],
                     )
             )

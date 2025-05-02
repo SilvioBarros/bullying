@@ -1,5 +1,6 @@
 ######################################################## 
 # Faculdade: Cesar School                              #
+# Curso: Segurança da Informação                       #
 # Período: 2025.1                                      #
 # Disciplina: Projeto 1                                #
 # Professor: Humberto Caetano                          #
@@ -14,5 +15,5 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 22/04/2025                                     #
+# Data: 02/05/2025                                     #
 ######################################################## 
