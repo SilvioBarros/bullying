@@ -15,13 +15,14 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 02/05/2025                                     #
+# Data: 04/05/2025                                     #
 ######################################################## 
 
 import dados
 import utilidades
 import flet as ft
 import re
+import webbrowser
 from pathlib import Path
 from datetime import datetime
 
@@ -169,7 +170,7 @@ def main(page: ft.Page):
                         ft.Row([
                             ft.Icon(ft.Icons.CHECK_CIRCLE, color="green"),
                             ft.Text("Senha forte!", weight=ft.FontWeight.BOLD)
-                        ])
+                        ]),
                     ]
         
                 cl_validacao_indicadores.update()
@@ -243,7 +244,7 @@ def main(page: ft.Page):
                         ft.Row([
                             ft.Icon(ft.Icons.CHECK_CIRCLE, color="green"),
                             ft.Text("Senha Confirmada!", weight=ft.FontWeight.BOLD)
-                        ])
+                        ]),
                     ]
         
                 cl_validacao_indicadores_confirmar.update()
@@ -491,11 +492,7 @@ def main(page: ft.Page):
                                     alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
                                 ),
                                 ft.Row(
-                                    controls=[dd_local, dd_frequencia],
-                                    alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
-                                ),
-                                ft.Row(
-                                    controls=[dd_tipo_bullying],
+                                    controls=[dd_local, dd_frequencia, dd_tipo_bullying],
                                     alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
                                 ),
                                 ft.Row(
@@ -751,6 +748,64 @@ def main(page: ft.Page):
             )
             # Página Materiais Educativos
             if page.route == "/materiaiseducativos":
+                # link_url1 ="https://drive.google.com/file/d/12zx4dH49ydysy4i5-DeaZjdZUQefIrXH/view?usp=sharing"
+                # link_url2 ="https://drive.google.com/file/d/1wB3Hcfw4FFT_wPOPd3ZK1kR6EDJVtrJS/view?usp=sharing"
+                # link_url3 ="https://www.youtube.com/watch?v=mWQoikd72A4"
+
+                rows = []
+
+                header = ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.Text("Descrição do Material Educativo", weight=ft.FontWeight.BOLD, expand=True),
+                            ft.Text("Link", weight=ft.FontWeight.BOLD),
+                        ],
+                        spacing=20
+                    ),
+                    padding=10,
+                    bgcolor=ft.Colors.GREY_200,
+                )
+                rows.append(header)
+
+                materiais = bd.listar_materiais_educativos(status="Ativo")
+
+                for item in materiais:
+                    descricao = ft.Text(
+                        item["Descricao"],
+                        size=14,
+                        color=ft.Colors.BLACK87,
+                        selectable=True,
+                    )
+
+                    link_btn = ft.ElevatedButton(
+                        text="Link",
+                        icon=ft.Icons.LINK,
+                        on_click=lambda e, url=item["Link"]: webbrowser.open(url),
+                        style=ft.ButtonStyle(
+                            padding=10,
+                            bgcolor=ft.Colors.BLUE_50,
+                            color=ft.Colors.BLUE_700
+                        )
+                    )
+
+                    row = ft.Container(
+                        content=ft.Row(
+                            controls=[
+                                ft.Container(descricao, expand=True, padding=10),
+                                ft.Container(link_btn, padding=10),
+                            ],
+                            spacing=20,
+                            vertical_alignment=ft.CrossAxisAlignment.START,
+                        ),
+                        border=ft.border.only(bottom=ft.border.BorderSide(1, ft.Colors.GREY_300)),
+                        padding=ft.padding.symmetric(vertical=5),
+                    )
+        
+                    rows.append(row)
+
+
+
+
                 page.views.append(
                    ft.View(
                         "/materiaiseducativos",
@@ -764,7 +819,17 @@ def main(page: ft.Page):
                                 ),
                                 bgcolor=ft.Colors.RED_300,
                             ),
-                            ft.ElevatedButton("Voltar", on_click=lambda _: page.go("/")),
+                            ft.Container(
+                                content=ft.Column(
+                                    controls=rows,
+                                    spacing=0,
+                                    expand=True,
+                                    scroll=ft.ScrollMode.AUTO,
+                                ),
+                                border=ft.border.all(1, ft.Colors.GREY_400),
+                                border_radius=5,
+                                expand=True,
+                            ),
                         ],
                     )
             )

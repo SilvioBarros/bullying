@@ -15,7 +15,7 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 02/05/2025                                     #
+# Data: 04/05/2025                                     #
 ######################################################## 
 
 import dados
@@ -380,6 +380,87 @@ try:
     data_fim = datetime.strptime("18/04/2025", FORMATO_DATA)
     log = bd.listar_log(data_inicio=data_inicio, data_fim=data_fim)
     print(log)
+    print('-' * 100)
+
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.pdf", link="https://drive.google.com/file/d/12zx4dH49ydysy4i5-DeaZjdZUQefIrXH/view?usp=sharing", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
+    print('-' * 100)
+
+    print("[Criar Material Educativo 3]")
+    material_novo_id = bd.criar_material_educativo(descricao="Este item tem uma descrição mais longa que deve ocupar múltiplas linhas na tabela. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc eu nisl.video", link="https://www.youtube.com/watch?v=mWQoikd72A4", usuario_id_criou=2, usuario_id_alterou=0, status="Ativo")
+    print(f"Novo ID {material_novo_id}")
     print('-' * 100)
 
 
