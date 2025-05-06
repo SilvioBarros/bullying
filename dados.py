@@ -15,7 +15,7 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 02/05/2025                                     #
+# Data: 05/05/2025                                     #
 ######################################################## 
 
 import sqlite3
@@ -304,6 +304,44 @@ class BancoDados:
         campos = {k: v for k, v in kwargs.items() if k in campos_permitidos}
 
         query = 'SELECT * FROM TB_Denuncias_Reuniao'
+
+        if campos:
+            flg = True
+            for campo, valor in campos.items():
+                if campo == 'denuncia_id':
+                   filtro = f'(DenunciaId={valor})'
+                elif campo == 'denuncia_reuniao_id':
+                   filtro = f'(DenunciaReuniaoId>{valor})'
+                elif campo == 'data':
+                   filtro = f'(date(DataHora)=date(\'{valor}\'))'
+                if flg:
+                   query += ' WHERE ' + filtro
+                   flg = False
+                else:   
+                   query += ' AND ' + filtro
+        # print(query)
+        with self._conectar() as conn:
+            conn.execute("PRAGMA journal_mode=WAL")  # Melhora concorrência
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute(query)
+            return [dict(row) for row in cursor.fetchall()]
+
+    # Listar Denúncias Reunião Usuário
+    def listar_denuncias_reuniao_usuario(self, **kwargs) -> List[Dict]:
+        campos_permitidos = {'denuncia_id', 'denuncia_reuniao_id', 'data'}
+        campos = {k: v for k, v in kwargs.items() if k in campos_permitidos}
+
+        query = '''SELECT
+                   A.DenunciaReuniaoId,
+                   A.DenunciaId,
+                   A.DataHora,
+                   A.Mensagem,
+                   A.UsuarioId,
+                   IFNULL(B.Nome, 'Denunciante') AS UsuarioNome,
+                   IFNULL(B.Tipo, 'Denunciante') AS UsuarioTipo
+                   FROM TB_Denuncias_Reuniao A
+                   LEFT JOIN TB_Usuarios B ON B.UsuarioId = A.UsuarioId'''
 
         if campos:
             flg = True

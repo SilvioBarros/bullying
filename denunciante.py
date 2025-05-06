@@ -15,7 +15,7 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 04/05/2025                                     #
+# Data: 05/05/2025                                     #
 ######################################################## 
 
 import dados
@@ -25,6 +25,7 @@ import re
 import webbrowser
 from pathlib import Path
 from datetime import datetime
+import asyncio
 
 # Constantes
 BANCO_DADOS = "bullying.db"
@@ -34,6 +35,10 @@ FORMATO_DATA = "%d/%m/%Y"
 # Variáveis Globais
 denuncia_id = 0
 denuncia_id_gerado = 0
+data_reuniao = datetime.now().date()
+flag_thread = False
+flag_atualiza = False
+reniao_id = 0
 
 # Função de Início da Aplicação
 def main(page: ft.Page):
@@ -57,6 +62,11 @@ def main(page: ft.Page):
             global denuncia_id
             global denuncia
             global denuncia_id_gerado
+            global data_reuniao
+            global flag_thread
+            global flag_atualiza
+            global reuniao_id
+            global lv_reuniao
 
             page.views.clear()
 
@@ -398,8 +408,104 @@ def main(page: ft.Page):
             def fazer_denuncia(e):
                 global denuncia_id_gerado
                 denuncia_id_gerado = bd.criar_denuncia(utilidades.gerar_hash_bcrypt(tf_senha_nova.value), tf_descricao_o_que.value, tf_descricao_como_se_sente.value, dd_local.value, dd_frequencia.value, dd_tipo_bullying.value) # type: ignore
-                print(denuncia_id_gerado)
+                # print(denuncia_id_gerado)
                 return page.go("/denunciaaviso")
+
+            # Validar Mensagem
+            def validar_mensagem(e):
+                nonlocal mensagem_valida
+                mensagem_valida = False
+                mensagem = tf_mensagem.value
+                erros = []
+                # Verifica cada requisito individualmente
+                if mensagem:
+                    if len(mensagem) < 1:
+                        erros.append("Mínimo 1 caractere")
+                else:
+                    erros.append("Mensagem requerida")
+                if erros:
+                   mensagem_valida = False
+                   tf_mensagem.error_text = "Mensagem inválida"
+                else:
+                   mensagem_valida = True
+                   tf_mensagem.error_text = None
+                bt_enviar_reuniao.disabled = not mensagem_valida
+                page.update()
+
+            # Enivar mensagem Reunião
+            def envia_reuniao(e):
+                global denuncia_id
+                global data_reuniao
+                global flag_thread
+                bd.criar_denuncia_reuniao(denuncia_id, tf_mensagem.value, 0) # type: ignore
+                tf_mensagem.value = ""
+                bt_enviar_reuniao.disabled = True
+                page.update()
+
+            # Autorefresh Reunião
+            async def auto_reuniao(ct_reuniao, page):
+                global lv_reuniao
+                global flag_atualiza
+                while flag_thread:
+                    # print(f"Auto {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} {flag_atualiza}")
+                    atualizar_reuniao(True)
+                    if flag_atualiza:
+                        flag_atualiza = False
+                        ct_reuniao.content.controls = [lv_reuniao]
+                        page.update()
+                    await asyncio.sleep(1)  # Espera 2 segundos antes de atualizar novamente
+
+            # Sair Reunião
+            def sair_reuniao(e):
+                global flag_thread
+                flag_thread = False
+                return page.go("/acompanhar")
+
+            # Atualizar Reunião
+            def atualizar_reuniao(fazer):
+                global denuncia_id
+                global reuniao_id
+                global data_reuniao
+                global lv_reuniao
+                global flag_atualiza
+                
+                aux_reuniao_id = 0
+                
+                reuniao = bd.listar_denuncias_reuniao_usuario(denuncia_id=denuncia_id, denuncia_reuniao_id=reuniao_id, data=data_reuniao)
+
+                for msg in reuniao:
+                    # Container para cada mensagem
+                    ct_reuniao = ft.Container(
+                        content=ft.Column(
+                            controls=[
+                                ft.Text(msg["UsuarioTipo"], weight=ft.FontWeight.BOLD),
+                                ft.Text(msg["Mensagem"], size=14),
+                                ft.Text(datetime.fromisoformat(msg["DataHora"]).strftime('%d/%m/%Y %H:%M:%S'), size=10, color=ft.Colors.GREY),
+                            ],
+                            spacing=2,
+                        ),
+                        padding=10,
+                        border_radius=10,
+                        bgcolor=ft.Colors.BLUE_100 if msg["UsuarioTipo"] == "Denunciante" else ft.Colors.GREEN_100,
+                        margin=ft.margin.only(left=50 if msg["UsuarioTipo"] == "Denunciante" else 0, right=0 if msg["UsuarioTipo"] == "Denunciante" else 50),
+                        alignment=ft.alignment.center_left if msg["UsuarioTipo"] == "Denunciante" else ft.alignment.center_right,
+                        expand=True,
+                    )
+                    # Adicionar à lista de itens
+                    itens_reuniao.append(ct_reuniao)
+                    aux_reuniao_id = msg["DenunciaReuniaoId"]
+                # Criar ListView com expansão
+                lv_reuniao = ft.ListView(
+                    controls=itens_reuniao,
+                    spacing=10,
+                    expand=True,  # Isso faz o ListView ocupar todo o espaço disponível
+                    auto_scroll=True,
+                )
+                # print(reuniao_id, aux_reuniao_id)    
+                if fazer:
+                    if aux_reuniao_id > reuniao_id:
+                       reuniao_id = aux_reuniao_id
+                       flag_atualiza = True
 
             # Página Inicial
             page.views.append(
@@ -426,6 +532,7 @@ def main(page: ft.Page):
                     ],
                 )
             )
+            
             # Página Fazer Denúncia de Bullying Anônima
             if page.route == "/denuncia":
                 descricao_o_que_valida = False
@@ -514,7 +621,8 @@ def main(page: ft.Page):
                             ]), expand=True, padding=10),
                         ],
                     )
-            )
+                )
+            
             # Página Fazer Denúncia de Bullying Anônima (Aviso)
             if page.route == "/denunciaaviso":
                 tf_v_aviso = ft.TextField(label="N° Denúncia", value=str(denuncia_id_gerado), read_only=True,  text_style=ft.TextStyle(weight=ft.FontWeight.BOLD, size=18, color=ft.Colors.BLUE))
@@ -542,7 +650,8 @@ def main(page: ft.Page):
                             ),
                         ],
                     )
-            )
+                )
+            
             # Página Acompanhar Denúncia de Bullying Login
             if page.route == "/acompanharlogin":
                 n_denuncia_valida = False
@@ -587,7 +696,8 @@ def main(page: ft.Page):
                             ),
                         ],
                     )
-            )
+                )
+            
             # Página Acompanhar Denúncia de Bullying
             if page.route == "/acompanhar":
                 # print(denuncia_id)
@@ -596,8 +706,8 @@ def main(page: ft.Page):
                 tf_v_n_denuncia = ft.TextField(label="Número da Denúncia", value=str(denuncia_id), read_only=True)
                 # tf_v_datahora = ft.TextField(label="Data e Hora", value=denuncia["DataHora"], read_only=True) # type: ignore
                 tf_v_datahora = ft.TextField(label="Data e Hora", value=datetime.fromisoformat(denuncia["DataHora"]).strftime('%d/%m/%Y %H:%M:%S'), read_only=True) # type: ignore
-                tf_v_descricao_o_que = ft.TextField(label="Descrição - O que?", value=denuncia["DescricaoOque"], read_only=True, multiline=True, width=610) # type: ignore
-                tf_v_descricao_como_se_sente = ft.TextField(label="Descrição - Como se sente?", value=denuncia["DescricaoComoSeSente"], read_only=True, multiline=True, width=610) # type: ignore
+                tf_v_descricao_o_que = ft.TextField(label="Descrição - O que?", value=denuncia["DescricaoOque"], read_only=True, multiline=True, width=610, max_lines=3) # type: ignore
+                tf_v_descricao_como_se_sente = ft.TextField(label="Descrição - Como se sente?", value=denuncia["DescricaoComoSeSente"], read_only=True, multiline=True, width=610, max_lines=3) # type: ignore
                 tf_v_local = ft.TextField(label="Local", value=denuncia["Local"], read_only=True) # type: ignore
                 tf_v_frequencia = ft.TextField(label="Frequência", value=denuncia["Frequencia"], read_only=True) # type: ignore
                 tf_v_tipo_bullying = ft.TextField(label="Tipo Bullying", value=denuncia["TipoBullying"], read_only=True) # type: ignore
@@ -690,7 +800,8 @@ def main(page: ft.Page):
                             # ]), expand=True, padding=10),
                         ],
                     )
-            )
+                )
+            
             # Página Acompanhar Denúncia de Bullying Novo Comentário
             if page.route == "/acompanharnovocomentario":
                 comentario_valida = False
@@ -726,26 +837,54 @@ def main(page: ft.Page):
                             ]), expand=True, padding=10),
                         ],
                    )
-            )
+                )
+            
             # Página Reunião
             if page.route == "/reuniao":
+                reuniao_id = 0
+                itens_reuniao = []
+                data_reuniao = datetime.now().date()
+                mensagem_valida = False
+                tf_mensagem = ft.TextField(label="Mensagem", multiline=True, expand=True, on_change=validar_mensagem, max_lines=1)
+                bt_enviar_reuniao = ft.ElevatedButton("Enviar mensagem", disabled=True, on_click=envia_reuniao, icon=ft.Icons.SEND)
+                
+                atualizar_reuniao(False)
+
+                ct_reuniao = ft.Container(
+                    content=lv_reuniao,
+                    expand=True,
+                    border=ft.border.all(1, ft.Colors.GREY_300),
+                    border_radius=10,
+                    padding=10,
+                )
+                
                 page.views.append(
                    ft.View(
                         "/reuniao",
                         [
                             ft.AppBar(
-                                title=ft.Text(f"Reunião [Denúncia N° {denuncia_id}]"),
+                                title=ft.Text(f"Reunião [{data_reuniao.strftime('%d/%m/%Y')}] [Denúncia N° {denuncia_id}]"),
                                 leading=ft.IconButton(
                                     icon=ft.Icons.ARROW_BACK,
                                     tooltip="Voltar",  # Tooltip modificado
-                                    on_click=lambda _: page.go("/acompanhar"),  # Comportamento de voltar padrão
+                                    # on_click=lambda _: page.go("/acompanhar"),  # Comportamento de voltar padrão
+                                    on_click=sair_reuniao,  # Comportamento de voltar padrão
                                 ),
                                 bgcolor=ft.Colors.RED_300,
                             ),
-                            ft.ElevatedButton("Voltar", on_click=lambda _: page.go("/")),
+
+                            ft.Row(
+                                controls=[tf_mensagem, bt_enviar_reuniao],
+                                alignment=ft.MainAxisAlignment.CENTER,  # Centraliza horizontalmente
+                            ),
+                            ct_reuniao
                         ],
                     )
-            )
+                )
+                # Iniciar atualização automática
+                flag_thread = True
+                asyncio.run(auto_reuniao(ct_reuniao, page))
+
             # Página Materiais Educativos
             if page.route == "/materiaiseducativos":
                 # link_url1 ="https://drive.google.com/file/d/12zx4dH49ydysy4i5-DeaZjdZUQefIrXH/view?usp=sharing"
@@ -833,6 +972,7 @@ def main(page: ft.Page):
                         ],
                     )
             )
+
             page.update()
 
         # Fechar a view atual e voltar à anterior
