@@ -1,6 +1,9 @@
 # Faculdade 
     Cesar School
 
+# Curso
+    Segurança da Informação
+
 # Período
     2025.1
 
