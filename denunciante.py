@@ -15,9 +15,10 @@
 #           Mauro Sérgio Rezende da Silva              #
 #           Silvio Barros Tenório                      #
 # Versão: 1.0                                          #
-# Data: 05/05/2025                                     #
+# Data: 10/05/2025                                     #
 ######################################################## 
 
+from pickle import TRUE
 import dados
 import utilidades
 import flet as ft
@@ -95,30 +96,31 @@ def main(page: ft.Page):
             # Validar Senha
             def validar_senha(e):
                 nonlocal senha_valida
-                senha_valida = False
-                senha = tf_senha.value
-                erros = []
-                lb_erro.value = ""
-                # Verifica cada requisito individualmente
-                if senha:
-                    if len(senha) < 8:
-                        erros.append("Mínimo 8 caracteres")
-                    if not re.search(r'[A-Z]', senha):
-                        erros.append("Pelo menos 1 letra maiúscula")
-                    if not re.search(r'[a-z]', senha):
-                        erros.append("Pelo menos 1 letra minúscula")
-                    if not re.search(r'[0-9]', senha):
-                        erros.append("Pelo menos 1 número")
-                    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', senha):
-                        erros.append("Pelo menos 1 símbolo especial")
-                else:
-                    erros.append("Senha requerida")
-                if erros:
-                   senha_valida = False
-                   tf_senha.error_text = "Senha inválida"
-                else:
-                   senha_valida = True
-                   tf_senha.error_text = None
+                senha_valida = True
+                # senha_valida = False
+                # senha = tf_senha.value
+                # erros = []
+                # lb_erro.value = ""
+                # # Verifica cada requisito individualmente
+                # if senha:
+                #     if len(senha) < 8:
+                #         erros.append("Mínimo 8 caracteres")
+                #     if not re.search(r'[A-Z]', senha):
+                #         erros.append("Pelo menos 1 letra maiúscula")
+                #     if not re.search(r'[a-z]', senha):
+                #         erros.append("Pelo menos 1 letra minúscula")
+                #     if not re.search(r'[0-9]', senha):
+                #         erros.append("Pelo menos 1 número")
+                #     if not re.search(r'[!@#$%^&*(),.?":{}|<>]', senha):
+                #         erros.append("Pelo menos 1 símbolo especial")
+                # else:
+                #     erros.append("Senha requerida")
+                # if erros:
+                #    senha_valida = False
+                #    tf_senha.error_text = "Senha inválida"
+                # else:
+                #    senha_valida = True
+                #    tf_senha.error_text = None
                 validar_login()   
                 page.update()
 
@@ -994,3 +996,4 @@ def main(page: ft.Page):
 # Início da Aplicação
 if __name__ == '__main__':
     ft.app(target=main)
+    # ft.app(target=main, view=ft.AppView.WEB_BROWSER)
