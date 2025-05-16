@@ -318,11 +318,11 @@ class Gerencial:
         pass
 
 # Inicialização do Módulo
-def main(page: ft.Page):
+def main_gerencial(page: ft.Page):
     Gerencial(page)
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main_gerencial)
 import dados
 import utilidades
 import flet as ft
